@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System;
 
 namespace Template
 {
@@ -11,6 +14,12 @@ namespace Template
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Player p;
+        List<FrånHöger> list;
+        Stopwatch time;
+        Random ypos = new Random();
+        Random randomFH = new Random();
+
         //KOmentar
         public Game1()
         {
@@ -41,6 +50,11 @@ namespace Template
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here 
+            time = new Stopwatch();
+            time.Start();
+            p = new Player(Content.Load<Texture2D>("xwing"), new Rectangle(200, 300, 50, 50));
+            list = new List<FrånHöger>();
+
         }
 
         /// <summary>
@@ -63,7 +77,41 @@ namespace Template
                 Exit();
 
             // TODO: Add your update logic here
-
+            p.Update(gameTime);
+            if (p.Lives == 0)
+                Exit();
+            if (time.ElapsedMilliseconds >= 500)
+            {
+                time.Stop();
+                time.Reset();
+                int r = randomFH.Next(1, 101);
+                if (r < 75)
+                    list.Add(new Enemy(Content.Load<Texture2D>("square"), new Rectangle(800, ypos.Next(10, 400), 40, 40)));
+                else if (r > 74)
+                    list.Add(new Life(Content.Load<Texture2D>("heart"), new Rectangle(800, ypos.Next(10, 400), 40, 40)));
+                time.Start();
+            }
+            foreach (FrånHöger element in list)
+            {
+                element.Update(gameTime);
+                if (element.Rec.Intersects(p.Rec))
+                {
+                    if (element is Enemy)
+                    {
+                        p.RemoveLife();
+                        element.RemoveObject();
+                    }
+                    else if (element is Life)
+                    {
+                        p.AddLife();
+                        element.RemoveObject();
+                    }
+                }
+                else if (element.Rec.X < 100)
+                {
+                    p.AddPoint();
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -76,7 +124,13 @@ namespace Template
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here.
-
+            spriteBatch.Begin();
+            p.Draw(spriteBatch);
+            foreach (FrånHöger element in list)
+            {
+                element.Draw(spriteBatch);
+            }
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
