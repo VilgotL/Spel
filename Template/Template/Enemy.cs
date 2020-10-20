@@ -7,8 +7,6 @@ namespace Template
 {
     class Enemy : FrånHöger
     {
-        protected static Random rnd = new Random();
-
         public Enemy(Texture2D tex, Rectangle rec) : base(tex, rec)
         {
         }
