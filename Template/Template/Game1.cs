@@ -20,6 +20,12 @@ namespace Template
         Random ypos = new Random();
         Random randomFH = new Random();
 
+        enum StartPos
+        {
+            X = 200,
+            Y = 300
+        }
+
         //KOmentar
         public Game1()
         {
@@ -52,7 +58,7 @@ namespace Template
             // TODO: use this.Content to load your game content here 
             time = new Stopwatch();
             time.Start();
-            p = new Player(Content.Load<Texture2D>("xwing"), new Rectangle(200, 300, 50, 50), Content.Load<SpriteFont>("Text"));
+            p = new Player(Content.Load<Texture2D>("xwing"), new Rectangle((int)StartPos.X, (int)StartPos.Y, 50, 50), Content.Load<SpriteFont>("Text"));
             list = new List<FrånHöger>();
 
         }
@@ -106,6 +112,7 @@ namespace Template
                     else if (element is Life)
                     {
                         p.AddLife();
+                        p.AddPoint();
                         element.RemoveObject();
                     }
                     else

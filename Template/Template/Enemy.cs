@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Template
 {
     class Enemy : FrånHöger
     {
+        protected static Random rnd = new Random();
+
         public Enemy(Texture2D tex, Rectangle rec) : base(tex, rec)
         {
         }

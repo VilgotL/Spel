@@ -26,7 +26,6 @@ namespace Template
             get { return points; }
             set { points = value; }
         }
-
         public void AddLife()
         {
             if (lives < 3)
