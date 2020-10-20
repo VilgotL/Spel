@@ -10,7 +10,7 @@ namespace Template
         public FrånHöger(Texture2D tex, Rectangle rec) : base(tex, rec)
         {
         }
-        protected int speed = 10;
+        protected int speed = 8;
 
         public void RemoveObject()
         {

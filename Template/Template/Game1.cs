@@ -52,7 +52,7 @@ namespace Template
             // TODO: use this.Content to load your game content here 
             time = new Stopwatch();
             time.Start();
-            p = new Player(Content.Load<Texture2D>("xwing"), new Rectangle(200, 300, 50, 50));
+            p = new Player(Content.Load<Texture2D>("xwing"), new Rectangle(200, 300, 50, 50), Content.Load<SpriteFont>("Text"));
             list = new List<FrånHöger>();
 
         }
@@ -80,15 +80,17 @@ namespace Template
             p.Update(gameTime);
             if (p.Lives == 0)
                 Exit();
-            if (time.ElapsedMilliseconds >= 500)
+            if (time.ElapsedMilliseconds >= 450)
             {
                 time.Stop();
                 time.Reset();
                 int r = randomFH.Next(1, 101);
-                if (r < 75)
+                if (r < 76)
                     list.Add(new Enemy(Content.Load<Texture2D>("square"), new Rectangle(800, ypos.Next(10, 400), 40, 40)));
-                else if (r > 74)
+                else if (r > 75 && r < 93)
                     list.Add(new Life(Content.Load<Texture2D>("heart"), new Rectangle(800, ypos.Next(10, 400), 40, 40)));
+                else
+                    list.Add(new Point(Content.Load<Texture2D>("star"), new Rectangle(800, ypos.Next(10, 400), 40, 40)));
                 time.Start();
             }
             foreach (FrånHöger element in list)
@@ -106,10 +108,19 @@ namespace Template
                         p.AddLife();
                         element.RemoveObject();
                     }
+                    else
+                    {
+                        for(int i = 0; i < 10; i++)
+                        {
+                            p.AddPoint();
+                        }
+                        element.RemoveObject();
+                    }
                 }
-                else if (element.Rec.X < 100)
+                else if (element.Rec.X < 200 && element.Rec.X > 190)
                 {
-                    p.AddPoint();
+                    if (element is Enemy)
+                        p.AddPoint();
                 }
             }
             base.Update(gameTime);
